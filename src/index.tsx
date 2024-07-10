@@ -1,3 +1,3 @@
-import app from './firebaseConfig';
+import app from './services/firebaseConfig';
 
 console.log('Firebase app initialized:', app);
