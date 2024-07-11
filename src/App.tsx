@@ -1,13 +1,21 @@
-import React from "react";
-import Question from "./components/Question";
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Home from './components/Home';
+import Questions from './components/Questions';
+import FAQs from './components/FAQs';
 
 const App: React.FC = () => {
   return (
-    <div>
-      <h1>Canadian Citizenship Test Practice</h1>
-      <Question />
-    </div>
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/questions" element={<Questions />} />
+        <Route path="/faqs" element={<FAQs />} />
+      </Routes>
+    </Router>
   );
-};
+}
 
 export default App;
