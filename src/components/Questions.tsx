@@ -7,7 +7,7 @@ interface QuestionType {
   Answer: string;
 }
 
-const Question: React.FC = () => {
+const Questions: React.FC = () => {
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedOptions, setSelectedOptions] = useState<{ [key: string]: string }>({});
@@ -105,4 +105,4 @@ const Question: React.FC = () => {
   );
 };
 
-export default Question;
+export default Questions;
