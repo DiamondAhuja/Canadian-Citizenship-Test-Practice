@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { fetchQuestions } from "../services/questionService";
 
+interface QuestionType {
+  Question: string;
+  Options: string[];
+  Answer: string;
+}
+
 const Question: React.FC = () => {
-  const [questions, setQuestions] = useState<any[]>([]);
+  const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedOptions, setSelectedOptions] = useState<{ [key: string]: string }>({});
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     async function getQuestions() {
@@ -19,22 +28,79 @@ const Question: React.FC = () => {
     getQuestions();
   }, []);
 
+  const handleOptionChange = (option: string) => {
+    setSelectedOptions({
+      ...selectedOptions,
+      [currentQuestionIndex]: option,
+    });
+  };
+
+  const handleNext = () => {
+    setCurrentQuestionIndex(currentQuestionIndex + 1);
+  };
+
+  const handlePrevious = () => {
+    setCurrentQuestionIndex(currentQuestionIndex - 1);
+  };
+
+  const handleSubmit = () => {
+    setSubmitted(true);
+  };
+
+  const renderResult = () => {
+    let correctCount = 0;
+    questions.forEach((question, index) => {
+      if (question.Answer === selectedOptions[index]) {
+        correctCount++;
+      }
+    });
+    return (
+      <div>
+        <h2>Results</h2>
+        <p>You got {correctCount} out of {questions.length} questions right.</p>
+      </div>
+    );
+  };
+
   if (loading) {
     return <div>Loading questions...</div>;
   }
 
+  if (submitted) {
+    return renderResult();
+  }
+
+  const question = questions[currentQuestionIndex];
+
   return (
     <div>
-      {questions.map((question, index) => (
-        <div key={index}>
-          <h3>{question.Question}</h3>
-          <ul>
-            {question.Options.map((option: any, idx: any) => (
-              <li key={idx}>{option}</li>
-            ))}
-          </ul>
-        </div>
-      ))}
+      <div key={currentQuestionIndex}>
+        <h3>{question.Question}</h3>
+        <ul>
+          {question.Options.map((option, idx) => (
+            <li key={idx}>
+              <label>
+                <input
+                  type="radio"
+                  name={`question-${currentQuestionIndex}`}
+                  value={option}
+                  checked={selectedOptions[currentQuestionIndex] === option}
+                  onChange={() => handleOptionChange(option)}
+                />
+                {option}
+              </label>
+            </li>
+          ))}
+        </ul>
+      </div>
+      {currentQuestionIndex > 0 && (
+        <button onClick={handlePrevious}>Previous</button>
+      )}
+      {currentQuestionIndex < questions.length - 1 ? (
+        <button onClick={handleNext}>Next</button>
+      ) : (
+        <button onClick={handleSubmit}>Submit Answers</button>
+      )}
     </div>
   );
 };
