@@ -35,8 +35,8 @@ module.exports = {
     }),
     new NodePolyfillPlugin(),
     new webpack.ProvidePlugin({
-      process: 'process/browser',
-      Buffer: ['buffer', 'Buffer'],
+      process: "process/browser",
+      Buffer: ["buffer", "Buffer"],
     }),
     new Dotenv(),
   ],
@@ -45,5 +45,10 @@ module.exports = {
       directory: path.join(__dirname, "dist"),
     },
     hot: true,
+  },
+  performance: {
+    hints: false,
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000,
   },
 };
