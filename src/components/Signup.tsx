@@ -1,19 +1,24 @@
 // Signup.tsx
-import React, { useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../services/firebaseConfig';
+import React, { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../services/firebaseConfig";
+import { useNavigate } from "react-router-dom";
 
 const Signup: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [signupError, setSignupError] = useState("");
+  const navigate = useNavigate();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      // Handle successful signup, redirect or show a message
+      setSignupError("");
+      navigate("/");
     } catch (error) {
       console.error("Error signing up: ", error);
+      setSignupError("An error occurred during signup. Please try again.");
     }
   };
 
@@ -35,6 +40,7 @@ const Signup: React.FC = () => {
         />
         <button type="submit">Signup</button>
       </form>
+      {signupError && <p style={{ color: "red" }}>{signupError}</p>}
     </div>
   );
 };
