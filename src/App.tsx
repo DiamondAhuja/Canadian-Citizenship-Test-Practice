@@ -8,6 +8,7 @@ import FAQs from "./components/FAQs";
 import Logout from "./components/Logout";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
+import AddQuestion from "./components/AddQuestion";
 
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -27,6 +28,7 @@ const App: React.FC = () => {
         <Route path="/" element={<Home />} />
         <Route path="/questions" element={<Questions />} />
         <Route path="/faqs" element={<FAQs />} />
+        <Route path="/add-question" element={<AddQuestion />} />
         {user ? (
           <>
             <Route path="/logout" element={<Logout />} />
