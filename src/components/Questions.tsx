@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchQuestions } from "../services/questionService";
+import { updateUserStats } from "../services/userStatsService";
+import { useAuth } from "../services/authService";
 
 interface QuestionType {
   Question: string;
@@ -13,6 +15,7 @@ const Questions: React.FC = () => {
   const [selectedOptions, setSelectedOptions] = useState<{ [key: string]: string }>({});
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const { user } = useAuth(); // Custom hook to get the current user
 
   useEffect(() => {
     async function getQuestions() {
@@ -43,8 +46,22 @@ const Questions: React.FC = () => {
     setCurrentQuestionIndex(currentQuestionIndex - 1);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setSubmitted(true);
+    if (user) {
+      await updateStats();
+    }
+  };
+
+  const updateStats = async () => {
+    for (let index = 0; index < questions.length; index++) {
+      const question = questions[index];
+      const userAnswer = selectedOptions[index];
+      const isCorrect = userAnswer === question.Answer;
+      if (user) {
+        await updateUserStats(user.uid, isCorrect);
+      }
+    }
   };
 
   const renderResult = () => {

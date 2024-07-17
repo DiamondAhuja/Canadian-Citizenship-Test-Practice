@@ -35,6 +35,11 @@ const Navbar: React.FC<NavbarProps> = ({ user }) => {
               Add Question
             </Link>
           </li>
+          <li className="nav-item">
+            <Link to="/user-stats" className="nav-links">
+              User Stats
+            </Link>
+          </li>
           {user ? (
             <li className="nav-item">
               <Link to="/logout" className="nav-links">
