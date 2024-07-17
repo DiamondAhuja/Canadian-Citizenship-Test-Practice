@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
-import Navbar from './components/Navbar';
-import Home from './components/Home';
-import Questions from './components/Questions';
-import FAQs from './components/FAQs';
-import Logout from './components/Logout';
-import Login from './components/Login';
-import Signup from './components/Signup';
-import AnonymousSignIn from './components/AnonymousSignIn';
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import Navbar from "./components/Navbar";
+import Home from "./components/Home";
+import Questions from "./components/Questions";
+import FAQs from "./components/FAQs";
+import Logout from "./components/Logout";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
 
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -36,7 +35,6 @@ const App: React.FC = () => {
           <>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/anonymous" element={<AnonymousSignIn />} />
           </>
         )}
       </Routes>

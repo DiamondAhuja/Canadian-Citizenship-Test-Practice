@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import '../styles/Navbar.css';
-import { User } from 'firebase/auth';
+import React from "react";
+import { Link } from "react-router-dom";
+import "../styles/Navbar.css";
+import { User } from "firebase/auth";
 
 interface NavbarProps {
   user: User | null;
@@ -46,11 +46,6 @@ const Navbar: React.FC<NavbarProps> = ({ user }) => {
               <li className="nav-item">
                 <Link to="/signup" className="nav-links">
                   Signup
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/anonymous" className="nav-links">
-                  Continue as Guest
                 </Link>
               </li>
             </>
