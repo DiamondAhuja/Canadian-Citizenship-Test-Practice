@@ -18,17 +18,13 @@ const AddQuestion: React.FC = () => {
   const handleAddQuestion = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const querySnapshot = await getDocs(collection(db, "questions"));
-      const documentCount = querySnapshot.docs.length;
-
-      const newDocumentId = documentCount + 1;
-
-      await setDoc(doc(db, "questions", newDocumentId.toString()), {
+      await addDoc(collection(db, "questions"), {
         Question: question,
         Options: options,
         Answer: answer,
       });
-
+  
+      // Reset form fields after successful addition
       setQuestion("");
       setOptions(["", "", "", ""]);
       setAnswer("");
