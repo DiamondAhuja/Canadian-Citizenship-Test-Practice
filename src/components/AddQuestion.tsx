@@ -1,6 +1,7 @@
-// src/AddQuestion.tsx
+// AddQuestion.tsx
 import React, { useState } from "react";
-import { collection, addDoc, getDocs, doc, setDoc } from 'firebase/firestore';import { db } from "../services/firebaseConfig";
+import { collection, addDoc, getDocs, doc, setDoc } from "firebase/firestore";
+import { db } from "../services/firebaseConfig";
 import "../styles/AddQuestion.css";
 
 const AddQuestion: React.FC = () => {
@@ -17,21 +18,17 @@ const AddQuestion: React.FC = () => {
   const handleAddQuestion = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Fetch the current number of documents in the collection
       const querySnapshot = await getDocs(collection(db, "questions"));
       const documentCount = querySnapshot.docs.length;
 
-      // Use the next number as the document ID
       const newDocumentId = documentCount + 1;
 
-      // Add the new question using the newDocumentId as the document ID
       await setDoc(doc(db, "questions", newDocumentId.toString()), {
         Question: question,
         Options: options,
         Answer: answer,
       });
 
-      // Reset form fields
       setQuestion("");
       setOptions(["", "", "", ""]);
       setAnswer("");
