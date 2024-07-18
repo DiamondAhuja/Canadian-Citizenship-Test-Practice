@@ -66,15 +66,38 @@ const Questions: React.FC = () => {
 
   const renderResult = () => {
     let correctCount = 0;
+    const wrongAnswers: { question: string; selectedAnswer: string; correctAnswer: string }[] = [];
+
     questions.forEach((question, index) => {
       if (question.Answer === selectedOptions[index]) {
         correctCount++;
+      } else {
+        wrongAnswers.push({
+          question: question.Question,
+          selectedAnswer: selectedOptions[index],
+          correctAnswer: question.Answer,
+        });
       }
     });
+
     return (
       <div>
         <h2>Results</h2>
         <p>You got {correctCount} out of {questions.length} questions right.</p>
+        {wrongAnswers.length > 0 && (
+          <div>
+            <h3>Questions you got wrong:</h3>
+            <ul>
+              {wrongAnswers.map((wrong, idx) => (
+                <li key={idx}>
+                  <p><strong>Question:</strong> {wrong.question}</p>
+                  <p><strong>Your answer:</strong> {wrong.selectedAnswer}</p>
+                  <p><strong>Correct answer:</strong> {wrong.correctAnswer}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     );
   };
