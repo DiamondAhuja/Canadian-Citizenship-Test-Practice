@@ -1,30 +1,59 @@
-// src/components/UserStats.tsx
 import React, { useEffect, useState } from "react";
-import { getUserStats } from "../services/userStatsService";
+import { collection, query, getDocs, orderBy } from "firebase/firestore";
 import { useAuth } from "../services/authService";
+import { db } from "../services/firebaseConfig";
+import { Link } from "react-router-dom";
+
+interface AttemptType {
+  id: string;
+  score: number;
+  timestamp: any;
+}
 
 const UserStats: React.FC = () => {
-  const [stats, setStats] = useState<{ correct: number; incorrect: number }>({
-    correct: 0,
-    incorrect: 0,
-  });
+  const [attempts, setAttempts] = useState<AttemptType[]>([]);
   const { user } = useAuth();
 
   useEffect(() => {
-    const fetchStats = async () => {
+    async function fetchAttempts() {
       if (user) {
-        const userStats = await getUserStats(user.uid);
-        setStats(userStats as { correct: number; incorrect: number });
+        const userAttemptsRef = collection(
+          db,
+          "userStats",
+          user.uid,
+          "attempts"
+        );
+        const attemptsQuery = query(
+          userAttemptsRef,
+          orderBy("timestamp", "desc")
+        );
+        const attemptDocs = await getDocs(attemptsQuery);
+        const attemptsList: AttemptType[] = attemptDocs.docs.map((doc) => ({
+          id: doc.id,
+          score: doc.data().score,
+          timestamp: doc.data().timestamp.toDate().toString(), // convert to readable string
+        }));
+        setAttempts(attemptsList);
       }
-    };
-    fetchStats();
+    }
+    fetchAttempts();
   }, [user]);
 
   return (
     <div>
-      <h3>User Stats</h3>
-      <p>Correct: {stats.correct}</p>
-      <p>Incorrect: {stats.incorrect}</p>
+      <h2>Your Attempts</h2>
+      {attempts.length === 0 ? (
+        <p>No attempts found.</p>
+      ) : (
+        <ul>
+          {attempts.map((attempt, index) => (
+            <li key={index}>
+              <p>Score: {attempt.score}</p>
+              <p>Date: {attempt.timestamp}</p>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchQuestions } from "../services/questionService";
-import { updateUserStats } from "../services/userStatsService";
+import { addUserAttempt } from "../services/userStatsService";
 import { useAuth } from "../services/authService";
 
 interface QuestionType {
@@ -12,7 +12,9 @@ interface QuestionType {
 const Questions: React.FC = () => {
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedOptions, setSelectedOptions] = useState<{ [key: string]: string }>({});
+  const [selectedOptions, setSelectedOptions] = useState<{
+    [key: string]: string;
+  }>({});
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const { user } = useAuth(); // Custom hook to get the current user
@@ -48,25 +50,29 @@ const Questions: React.FC = () => {
 
   const handleSubmit = async () => {
     setSubmitted(true);
+    const score = calculateScore();
     if (user) {
-      await updateStats();
+      await addUserAttempt(user.uid, score);
     }
   };
 
-  const updateStats = async () => {
-    for (let index = 0; index < questions.length; index++) {
-      const question = questions[index];
-      const userAnswer = selectedOptions[index];
-      const isCorrect = userAnswer === question.Answer;
-      if (user) {
-        await updateUserStats(user.uid, isCorrect);
+  const calculateScore = () => {
+    let correctCount = 0;
+    questions.forEach((question, index) => {
+      if (question.Answer === selectedOptions[index]) {
+        correctCount++;
       }
-    }
+    });
+    return correctCount;
   };
 
   const renderResult = () => {
     let correctCount = 0;
-    const wrongAnswers: { question: string; selectedAnswer: string; correctAnswer: string }[] = [];
+    const wrongAnswers: {
+      question: string;
+      selectedAnswer: string;
+      correctAnswer: string;
+    }[] = [];
 
     questions.forEach((question, index) => {
       if (question.Answer === selectedOptions[index]) {
@@ -83,16 +89,24 @@ const Questions: React.FC = () => {
     return (
       <div>
         <h2>Results</h2>
-        <p>You got {correctCount} out of {questions.length} questions right.</p>
+        <p>
+          You got {correctCount} out of {questions.length} questions right.
+        </p>
         {wrongAnswers.length > 0 && (
           <div>
             <h3>Questions you got wrong:</h3>
             <ul>
               {wrongAnswers.map((wrong, idx) => (
                 <li key={idx}>
-                  <p><strong>Question:</strong> {wrong.question}</p>
-                  <p><strong>Your answer:</strong> {wrong.selectedAnswer}</p>
-                  <p><strong>Correct answer:</strong> {wrong.correctAnswer}</p>
+                  <p>
+                    <strong>Question:</strong> {wrong.question}
+                  </p>
+                  <p>
+                    <strong>Your answer:</strong> {wrong.selectedAnswer}
+                  </p>
+                  <p>
+                    <strong>Correct answer:</strong> {wrong.correctAnswer}
+                  </p>
                 </li>
               ))}
             </ul>
