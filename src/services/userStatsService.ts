@@ -1,6 +1,6 @@
 // userStatsService.ts
 import { db, auth } from "./firebaseConfig";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc, addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 const getUserStats = async (userId: string) => {
   const userStatsRef = doc(db, "userStats", userId);
@@ -8,30 +8,31 @@ const getUserStats = async (userId: string) => {
   if (userStatsSnap.exists()) {
     return userStatsSnap.data();
   } else {
-    return { correct: 0, incorrect: 0 };
+    return { attempts: [] }; // Changed to store attempts array
   }
 };
 
-const updateUserStats = async (userId: string, correct: boolean) => {
+const addUserAttempt = async (userId: string, score: number) => {
+  const userAttemptsRef = collection(doc(db, "userStats", userId), "attempts");
+  await addDoc(userAttemptsRef, {
+    score: score,
+    timestamp: serverTimestamp()
+  });
+};
+
+const updateUserStats = async (userId: string, score: number) => {
   const userStatsRef = doc(db, "userStats", userId);
   const userStatsSnap = await getDoc(userStatsRef);
   if (userStatsSnap.exists()) {
     const stats = userStatsSnap.data();
-    if (correct) {
-      await updateDoc(userStatsRef, {
-        correct: stats.correct + 1,
-      });
-    } else {
-      await updateDoc(userStatsRef, {
-        incorrect: stats.incorrect + 1,
-      });
-    }
+    const attempts = stats.attempts || [];
+    attempts.push({ score, timestamp: new Date() }); // Track each attempt
+    await updateDoc(userStatsRef, { attempts });
   } else {
     await setDoc(userStatsRef, {
-      correct: correct ? 1 : 0,
-      incorrect: correct ? 0 : 1,
+      attempts: [{ score, timestamp: new Date() }]
     });
   }
 };
 
-export { getUserStats, updateUserStats };
+export { getUserStats, updateUserStats, addUserAttempt };
