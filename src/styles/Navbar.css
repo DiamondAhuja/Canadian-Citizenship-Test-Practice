@@ -1,51 +1,120 @@
+/* Reset some basic styles for consistency across browsers */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Container styling */
 .navbar {
-    background: #333;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.2rem;
-  }
-  
-  .navbar-container {
-    display: flex;
-    justify-content: space-between;
-    height: 60px;
-    z-index: 1;
-    width: 100%;
-    max-width: 1000px;
-    padding: 0 20px;
-  }
-  
-  .navbar-logo {
-    color: #fff;
-    justify-self: start;
+  background-color: #333;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px;
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 20px;
+}
+
+/* Logo styling */
+.navbar-logo {
+  color: #fff;
+  justify-self: start;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+/* Menu icon styling */
+.menu-icon {
+  display: none;
+}
+
+.menu-icon i {
+  color: #fff;
+  font-size: 2rem;
+}
+
+/* Navbar items styling */
+.nav-menu {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  text-align: center;
+}
+
+.nav-menu.active {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 80px;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 80px);
+  background-color: #333;
+}
+
+.nav-item {
+  height: 80px;
+}
+
+.nav-links {
+  color: #fff;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 0 1rem;
+  height: 100%;
+  transition: all 0.2s ease-in-out;
+}
+
+.nav-links:hover {
+  background-color: #575757;
+  border-radius: 4px;
+}
+
+/* Mobile menu styling */
+@media screen and (max-width: 960px) {
+  .menu-icon {
+    display: block;
     cursor: pointer;
-    text-decoration: none;
-    font-size: 1.5rem;
   }
-  
+
   .nav-menu {
-    display: flex;
-    list-style: none;
-    text-align: center;
+    display: none;
+    width: 100%;
   }
-  
-  .nav-item {
-    height: 60px;
-  }
-  
-  .nav-links {
-    color: #fff;
+
+  .nav-menu.active {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    text-decoration: none;
-    padding: 0 1rem;
-    height: 100%;
+    width: 100%;
   }
-  
-  .nav-links:hover {
-    background-color: #575757;
-    border-radius: 4px;
+
+  .nav-item {
+    width: 100%;
   }
-  
+
+  .nav-links {
+    text-align: center;
+    padding: 2rem;
+    width: 100%;
+    display: table;
+  }
+}
