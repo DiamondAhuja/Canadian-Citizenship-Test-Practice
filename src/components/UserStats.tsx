@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { collection, query, getDocs, orderBy } from "firebase/firestore";
 import { useAuth } from "../services/authService";
 import { db } from "../services/firebaseConfig";
-import { Link } from "react-router-dom";
 
 interface AttemptType {
   id: string;
@@ -31,7 +30,7 @@ const UserStats: React.FC = () => {
         const attemptsList: AttemptType[] = attemptDocs.docs.map((doc) => ({
           id: doc.id,
           score: doc.data().score,
-          timestamp: doc.data().timestamp.toDate().toString(), // convert to readable string
+          timestamp: doc.data().timestamp.toDate().toString(), 
         }));
         setAttempts(attemptsList);
       }
