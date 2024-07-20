@@ -1,11 +1,9 @@
-/* Reset some basic styles for consistency across browsers */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Container styling */
 .navbar {
   background-color: #333;
   height: 80px;
@@ -40,7 +38,6 @@
   align-items: center;
 }
 
-/* Menu icon styling */
 .menu-icon {
   display: none;
 }
@@ -50,7 +47,6 @@
   font-size: 2rem;
 }
 
-/* Navbar items styling */
 .nav-menu {
   display: flex;
   align-items: center;
@@ -88,7 +84,6 @@
   border-radius: 4px;
 }
 
-/* Mobile menu styling */
 @media screen and (max-width: 960px) {
   .menu-icon {
     display: block;
